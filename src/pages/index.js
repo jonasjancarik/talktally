@@ -72,7 +72,7 @@ export default function Home() {
     return (
         <div>
             <div className="grid grid-cols-3 gap-4">
-                {speakers.map(speaker => (
+                {speakers.sort((a, b) => a.id - b.id).map(speaker => (
                     <Speaker key={speaker.id} {...speaker} onToggleTimer={handleToggleTimer} onRaiseHand={handleRaiseHand} />
                 ))}
                 <button onClick={addSpeaker} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
