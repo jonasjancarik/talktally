@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Speaker from '../components/Speaker';
+import RaisedHandList from '@/components/RaisedHandList';
 
 export default function Home() {
     const [speakers, setSpeakers] = useState([]);
@@ -13,28 +14,60 @@ export default function Home() {
         }
     };
 
-    const handleToggleTimer = (id) => {
-        setSpeakers(speakers.map(speaker => {
-            if (speaker.id === id) {
-                if (!speaker.isActive) {
-                    // Starting this speaker's timer
-                    setSpeakerLog([...speakerLog, { id: speaker.id, name: speaker.name, startTime: new Date() }]);
-                    return { ...speaker, isActive: true, floorCount: speaker.floorCount + 1 };
-                } else {
-                    // Pausing this speaker's timer
-                    const updatedTime = speaker.totalTime + Math.floor((new Date() - speakerLog.find(log => log.id === speaker.id).startTime) / 1000);
-                    return { ...speaker, isActive: false, totalTime: updatedTime };
+    const handleToggleTimer = (id, sessionDuration, isManualToggle) => {
+        setSpeakers(prevSpeakers => {
+            console.log('running handleToggleTimer');  
+            let isStartingNewTimer = false;
+
+            const updatedSpeakers = prevSpeakers.map(speaker => {
+                console.log(speaker);
+                if (speaker.id === id) {
+                    if (!speaker.isActive) {
+                        // Starting this speaker's timer
+                        isStartingNewTimer = true;
+                        return { ...speaker, isActive: true, floorCount: speaker.floorCount + 1 };
+                    } else {
+                        // Pausing this speaker's timer
+                        return { ...speaker, isActive: false, totalTime: speaker.totalTime + sessionDuration };
+                    }
                 }
-            } else {
-                // Ensure all other speakers are paused
-                return { ...speaker, isActive: false };
+                return speaker;
+            });
+
+            if (isStartingNewTimer && isManualToggle) {
+                // Deactivate all other speakers
+                return updatedSpeakers.map(speaker => {
+                    if (speaker.id !== id) {
+                        return { ...speaker, isActive: false };
+                    }
+                    return speaker;
+                });
             }
-        }));
+
+            return updatedSpeakers;
+        });
     };
 
     const handleRaiseHand = (id, isRaised) => {
-        setRaisedHands(prev => isRaised ? [...prev, speakers.find(speaker => speaker.id === id).name] : prev.filter(name => name !== speakers.find(speaker => speaker.id === id).name));
+        const speaker = speakers.find(speaker => speaker.id === id);
+        if (speaker) {
+            setRaisedHands(prev => isRaised ? [...prev, speaker.name] : prev.filter(name => name !== speaker.name));
+        }
     };
+
+    const handleLowerHand = (name) => {
+        // Find the speaker by name
+        const updatedSpeakers = speakers.map(speaker => {
+            if (speaker.name === name) {
+                return { ...speaker, raisedHand: false };  // Add a 'raisedHand' property or directly update your existing structure
+            } else {
+                return speaker;
+            }
+        });
+        setSpeakers(updatedSpeakers); // Update the speakers state
+
+        setRaisedHands(raisedHands.filter(hand => hand !== name)); // Update raisedHands
+    };    
 
     return (
         <div>
@@ -48,11 +81,7 @@ export default function Home() {
             </div>
             <div>
                 <h2>Raised Hands</h2>
-                <ul>
-                    {raisedHands.map((name, index) => (
-                        <li key={index}>{name}</li>
-                    ))}
-                </ul>
+                <RaisedHandList raisedHands={raisedHands} onHandLower={handleLowerHand} />
             </div>
             <div>
                 <h2>Speaker Log</h2>
