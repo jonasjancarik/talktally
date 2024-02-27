@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function Speaker({ speaker, onToggleTimer, onRaiseHand }) {
+function Speaker({ speaker, onToggleTimer, onRaiseHand, handleUpdateTime, onToggleHand }) {
     const [seconds, setSeconds] = useState(0);
 
     useEffect(() => {
@@ -8,13 +8,15 @@ function Speaker({ speaker, onToggleTimer, onRaiseHand }) {
         if (speaker.isActive) {
             interval = setInterval(() => {
                 setSeconds(seconds => seconds + 1);
-                speaker.totalTime += 1;
+                // Call handleUpdateTime instead of mutating speaker.totalTime
+                handleUpdateTime(speaker.id, 1);
             }, 1000);
         } else {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [speaker]);
+    }, [speaker, handleUpdateTime]);
+
 
     const toggleTimer = () => {
         // When starting the timer, ensure the hand is considered lowered
@@ -31,8 +33,8 @@ function Speaker({ speaker, onToggleTimer, onRaiseHand }) {
         onToggleTimer(speaker.id, true);
     };
 
-    const toggleHandRaise = () => {
-        onRaiseHand(speaker.id, !speaker.handRaised);
+    const toggleHand = () => {
+        onToggleHand(speaker.id);
     };
     
     return (
@@ -44,7 +46,7 @@ function Speaker({ speaker, onToggleTimer, onRaiseHand }) {
             <button onClick={toggleTimer} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                 {speaker.isActive ? 'Pause' : 'Start'}
             </button>
-            <button onClick={toggleHandRaise} className={`ml-2 ${speaker.handRaised ? 'bg-red-500' : 'bg-green-500'} hover:bg-red-700 text-white font-bold py-1 px-2 rounded`}>
+            <button onClick={toggleHand} className={`ml-2 ${speaker.handRaised ? 'bg-red-500' : 'bg-green-500'} hover:bg-red-700 text-white font-bold py-1 px-2 rounded`}>
                 {speaker.handRaised ? 'Lower Hand' : 'Raise Hand'}
             </button>        
         </div>

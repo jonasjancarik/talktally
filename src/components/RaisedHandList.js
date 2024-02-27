@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function RaisedHandList({ speakers, onHandLower }) {
+function RaisedHandList({ speakers, onToggleHand }) {
     // Sort speakers by the time their hand was raised
     const sortedSpeakers = speakers.sort((a, b) => a.handRaisedTime - b.handRaisedTime);
 
@@ -10,7 +10,7 @@ function RaisedHandList({ speakers, onHandLower }) {
                 {sortedSpeakers.map(speaker => (
                     <li key={speaker.id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
                         {speaker.name}
-                        <button onClick={() => onHandLower(speaker.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                        <button onClick={() => onToggleHand(speaker.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
                             Lower Hand
                         </button>
                     </li>

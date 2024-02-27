@@ -16,7 +16,7 @@ export default function Home() {
 
     const handleToggleTimer = (id, isManualToggle) => {
         setSpeakers(prevSpeakers => {
-            console.log('running handleToggleTimer');  
+            console.log('running handleToggleTimer');
             let isStartingNewTimer = false;
 
             const updatedSpeakers = prevSpeakers.map(speaker => {
@@ -48,31 +48,38 @@ export default function Home() {
         });
     };
 
-    const handleRaiseHand = (id, isRaised) => {
+    const handleToggleHand = (id) => {
         setSpeakers(speakers.map(speaker => {
             if (speaker.id === id) {
+                // Toggle the handRaised state
+                const isRaised = !speaker.handRaised;
                 return { ...speaker, handRaised: isRaised, handRaisedTime: isRaised ? new Date() : null };
             }
             return speaker;
         }));
     };
 
-
-    const handleLowerHand = (id) => {
-        setSpeakers(speakers.map(speaker => {
+    const handleUpdateTime = (id, time) => {
+        setSpeakers(prevSpeakers => prevSpeakers.map(speaker => {
             if (speaker.id === id) {
-                return { ...speaker, handRaised: false };
+                return { ...speaker, totalTime: speaker.totalTime + time };
             }
             return speaker;
         }));
     };
- 
 
     return (
         <div>
             <div className="grid grid-cols-3 gap-4">
                 {speakers.sort((a, b) => a.id - b.id).map(speaker => (
-                    <Speaker key={speaker.id} speaker={speaker} isActive={speaker.isActive} onToggleTimer={handleToggleTimer} onRaiseHand={handleRaiseHand} />
+                    <Speaker
+                        key={speaker.id}
+                        speaker={speaker}
+                        isActive={speaker.isActive}
+                        onToggleTimer={handleToggleTimer}
+                        onToggleHand={handleToggleHand}
+                        handleUpdateTime={handleUpdateTime}
+                    />
                 ))}
                 <button onClick={addSpeaker} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Add Speaker
@@ -80,7 +87,7 @@ export default function Home() {
             </div>
             <div>
                 <h2>Raised Hands</h2>
-                <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onHandLower={handleLowerHand} />
+                <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
             </div>
             <div>
                 <h2>Speaker Log</h2>
@@ -93,7 +100,7 @@ export default function Home() {
             <div className="mt-4">
                 <h2 className="text-xl font-semibold">Leaderboard</h2>
                 <LeaderBoard speakers={speakers} />
-            </div>            
+            </div>
         </div>
     );
 }
