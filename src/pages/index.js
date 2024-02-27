@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Speaker from '../components/Speaker';
 import RaisedHandList from '@/components/RaisedHandList';
+import LeaderBoard from '@/components/LeaderBoard';
 
 export default function Home() {
     const [speakers, setSpeakers] = useState([]);
@@ -91,13 +92,7 @@ export default function Home() {
             </div>
             <div className="mt-4">
                 <h2 className="text-xl font-semibold">Leaderboard</h2>
-                <ul>
-                    {speakers.sort((a, b) => b.totalTime - a.totalTime).map((speaker, index) => (
-                        <li key={index} className="mt-2">
-                            {`${speaker.name}: ${speaker.totalTime}s`}
-                        </li>
-                    ))}
-                </ul>
+                <LeaderBoard speakers={speakers} />
             </div>            
         </div>
     );

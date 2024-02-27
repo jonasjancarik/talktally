@@ -8,7 +8,7 @@ function Speaker({ speaker, onToggleTimer, onRaiseHand }) {
         if (speaker.isActive) {
             interval = setInterval(() => {
                 setSeconds(seconds => seconds + 1);
-                speaker.totalTime += 1; // Update the totalTime value using the ref
+                speaker.totalTime += 1;
             }, 1000);
         } else {
             clearInterval(interval);
