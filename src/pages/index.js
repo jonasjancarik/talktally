@@ -82,12 +82,26 @@ export default function Home() {
                         />
                     </div>
                 ))}
-                <button onClick={addSpeaker} className="btn btn-primary">
-                    Add Speaker
-                </button>
+                <div className='col-md-4 mb-3'>
+                    <button type='button' onClick={addSpeaker} className="btn btn-primary w-100 h-100">
+                        Add Speaker
+                    </button>
+                </div>
             </div>
-            <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
-            <LeaderBoard speakers={speakers} />
+            <div className="row">
+                <div className="col-md-6">
+                    <h2>Raised Hands</h2>
+                    {speakers.filter(speaker => speaker.handRaised).length > 0 ? (
+                        <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
+                    ) : (
+                        <em>Queue empty</em>
+                    )}
+                </div>
+                <div className="col-md-6">
+                    <h2>Leaderboard</h2>
+                    <LeaderBoard speakers={speakers} />
+                </div>
+            </div>
         </div>
     );
 }
