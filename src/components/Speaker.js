@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function Speaker({ speaker, onToggleTimer, onRaiseHand, handleUpdateTime, onToggleHand }) {
+function Speaker({ speaker, onToggleTimer, handleUpdateTime, onToggleHand }) {
     const [seconds, setSeconds] = useState(0);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function Speaker({ speaker, onToggleTimer, onRaiseHand, handleUpdateTime, onTogg
     const toggleTimer = () => {
         // When starting the timer, ensure the hand is considered lowered
         if (!speaker.isActive) {
-            onRaiseHand(speaker.id, false);
+            onToggleHand(speaker.id, false);
         }
 
         // Set current seconds to 0 when starting the timer
