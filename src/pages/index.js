@@ -4,7 +4,6 @@ import RaisedHandList from '@/components/RaisedHandList';
 
 export default function Home() {
     const [speakers, setSpeakers] = useState([]);
-    const [raisedHands, setRaisedHands] = useState([]);
     const [speakerLog, setSpeakerLog] = useState([]);
 
     const addSpeaker = () => {
@@ -14,7 +13,7 @@ export default function Home() {
         }
     };
 
-    const handleToggleTimer = (id, sessionDuration, isManualToggle) => {
+    const handleToggleTimer = (id, isManualToggle) => {
         setSpeakers(prevSpeakers => {
             console.log('running handleToggleTimer');  
             let isStartingNewTimer = false;
@@ -28,7 +27,7 @@ export default function Home() {
                         return { ...speaker, isActive: true, floorCount: speaker.floorCount + 1 };
                     } else {
                         // Pausing this speaker's timer
-                        return { ...speaker, isActive: false, totalTime: speaker.totalTime + sessionDuration };
+                        return { ...speaker, isActive: false };
                     }
                 }
                 return speaker;
@@ -49,31 +48,30 @@ export default function Home() {
     };
 
     const handleRaiseHand = (id, isRaised) => {
-        const speaker = speakers.find(speaker => speaker.id === id);
-        if (speaker) {
-            setRaisedHands(prev => isRaised ? [...prev, speaker.name] : prev.filter(name => name !== speaker.name));
-        }
+        setSpeakers(speakers.map(speaker => {
+            if (speaker.id === id) {
+                return { ...speaker, handRaised: isRaised, handRaisedTime: isRaised ? new Date() : null };
+            }
+            return speaker;
+        }));
     };
 
-    const handleLowerHand = (name) => {
-        // Find the speaker by name
-        const updatedSpeakers = speakers.map(speaker => {
-            if (speaker.name === name) {
-                return { ...speaker, raisedHand: false };  // Add a 'raisedHand' property or directly update your existing structure
-            } else {
-                return speaker;
-            }
-        });
-        setSpeakers(updatedSpeakers); // Update the speakers state
 
-        setRaisedHands(raisedHands.filter(hand => hand !== name)); // Update raisedHands
-    };    
+    const handleLowerHand = (id) => {
+        setSpeakers(speakers.map(speaker => {
+            if (speaker.id === id) {
+                return { ...speaker, handRaised: false };
+            }
+            return speaker;
+        }));
+    };
+ 
 
     return (
         <div>
             <div className="grid grid-cols-3 gap-4">
                 {speakers.sort((a, b) => a.id - b.id).map(speaker => (
-                    <Speaker key={speaker.id} {...speaker} onToggleTimer={handleToggleTimer} onRaiseHand={handleRaiseHand} />
+                    <Speaker key={speaker.id} speaker={speaker} isActive={speaker.isActive} onToggleTimer={handleToggleTimer} onRaiseHand={handleRaiseHand} />
                 ))}
                 <button onClick={addSpeaker} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Add Speaker
@@ -81,7 +79,7 @@ export default function Home() {
             </div>
             <div>
                 <h2>Raised Hands</h2>
-                <RaisedHandList raisedHands={raisedHands} onHandLower={handleLowerHand} />
+                <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onHandLower={handleLowerHand} />
             </div>
             <div>
                 <h2>Speaker Log</h2>
