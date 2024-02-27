@@ -69,7 +69,7 @@ export default function Home() {
     };
 
     return (
-        <div>
+        <div className='p-5'>
             <div className="grid grid-cols-3 gap-4">
                 {speakers.sort((a, b) => a.id - b.id).map(speaker => (
                     <Speaker
@@ -86,11 +86,11 @@ export default function Home() {
                 </button>
             </div>
             <div>
-                <h2>Raised Hands</h2>
+                <h2 className='mt-3 text-lg font-semibold'>Raised Hands</h2>
                 <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
             </div>
             <div>
-                <h2>Speaker Log</h2>
+                <h2 className='mt-3 text-lg font-semibold'>Speaker Log</h2>
                 <ul>
                     {speakerLog.map((log, index) => (
                         <li key={index}>{`${log.name} started at ${log.startTime.toLocaleTimeString()}`}</li>
@@ -98,7 +98,7 @@ export default function Home() {
                 </ul>
             </div>
             <div className="mt-4">
-                <h2 className="text-xl font-semibold">Leaderboard</h2>
+                <h2 className="mt-3 text-lg font-semibold">Leaderboard</h2>
                 <LeaderBoard speakers={speakers} />
             </div>
         </div>

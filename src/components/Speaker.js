@@ -39,7 +39,7 @@ function Speaker({ speaker, onToggleTimer, onRaiseHand, handleUpdateTime, onTogg
     
     return (
         <div className="p-4 border rounded shadow">
-            <h3 className="text-lg">{speaker.name}</h3>
+            <h3 className="text-lg font-bold">{speaker.name}</h3>
             <div>Time: {seconds}s</div>
             <div>Total Time: {speaker.totalTime}s</div>
             <div>Floor Count: {speaker.floorCount}</div>

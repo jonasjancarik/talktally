@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 function LeaderBoard({ speakers }) {
     return (
-        <div className="p-4 border rounded shadow">
+        <div className="">
             <ul>
                 {speakers.sort((a, b) => b.totalTime - a.totalTime).map((speaker, index) => (
                     <li key={index} className="mt-2">
