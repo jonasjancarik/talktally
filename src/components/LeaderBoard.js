@@ -1,5 +1,6 @@
 // define a leaderboard component
 import React, { Component } from 'react';
+import FormatTime from './FormatTime';
 
 function LeaderBoard({ speakers }) {
     return (
@@ -7,7 +8,7 @@ function LeaderBoard({ speakers }) {
             <ul>
                 {speakers.sort((a, b) => b.totalTime - a.totalTime).map((speaker, index) => (
                     <li key={index} className="mt-2">
-                        {`${speaker.name}: ${speaker.totalTime}s`}
+                        {`${speaker.name}: ${FormatTime({ seconds: speaker.totalTime })}`}
                     </li>
                 ))}
             </ul>
