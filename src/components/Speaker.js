@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormatTime from './FormatTime';
 
 function Speaker({ speaker, onToggleTimer, handleUpdateTime, onToggleHand }) {
@@ -41,15 +41,15 @@ function Speaker({ speaker, onToggleTimer, handleUpdateTime, onToggleHand }) {
     };
 
     return (
-        <div className="p-4 border rounded shadow">
-            <h3 className="text-lg font-bold">{speaker.name}</h3>
-            <div>Time: <FormatTime seconds={seconds} /> </div>
-            <div>Total Time: <FormatTime seconds={speaker.totalTime} /> </div>
-            <div>Floor Count: {speaker.floorCount}</div>
-            <button onClick={toggleTimer} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+        <div className="card p-3 mb-3">
+            <h5 className="card-title">{speaker.name}</h5>
+            <p className="card-text">Time: <FormatTime seconds={seconds} /></p>
+            <p className="card-text">Total Time: <FormatTime seconds={speaker.totalTime} /></p>
+            <p className="card-text">Floor Count: {speaker.floorCount}</p>
+            <button onClick={toggleTimer} className={`btn ${speaker.isActive ? 'btn-secondary' : 'btn-primary'}`}>
                 {speaker.isActive ? 'Pause' : 'Start'}
             </button>
-            <button onClick={toggleHand} className={`ml-2 ${speaker.handRaised ? 'bg-red-500' : 'bg-green-500'} ${speaker.isActive ? 'opacity-50' : ''} hover:bg-red-700 text-white font-bold py-1 px-2 rounded`}>
+            <button onClick={toggleHand} className={`btn ${speaker.handRaised ? 'btn-danger' : 'btn-success'} ms-2`}>
                 {speaker.handRaised ? 'Lower Hand' : 'Raise Hand'}
             </button>
         </div>

@@ -69,38 +69,25 @@ export default function Home() {
     };
 
     return (
-        <div className='p-5'>
-            <div className="grid grid-cols-3 gap-4">
+        <div className='container py-5'>
+            <div className="row">
                 {speakers.sort((a, b) => a.id - b.id).map(speaker => (
-                    <Speaker
-                        key={speaker.id}
-                        speaker={speaker}
-                        isActive={speaker.isActive}
-                        onToggleTimer={handleToggleTimer}
-                        onToggleHand={handleToggleHand}
-                        handleUpdateTime={handleUpdateTime}
-                    />
+                    <div key={speaker.id} className="col-md-4 mb-3">
+                        <Speaker
+                            speaker={speaker}
+                            isActive={speaker.isActive}
+                            onToggleTimer={handleToggleTimer}
+                            onToggleHand={handleToggleHand}
+                            handleUpdateTime={handleUpdateTime}
+                        />
+                    </div>
                 ))}
-                <button onClick={addSpeaker} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button onClick={addSpeaker} className="btn btn-primary">
                     Add Speaker
                 </button>
             </div>
-            <div>
-                <h2 className='mt-3 text-lg font-semibold'>Raised Hands</h2>
-                <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
-            </div>
-            <div>
-                <h2 className='mt-3 text-lg font-semibold'>Speaker Log</h2>
-                <ul>
-                    {speakerLog.map((log, index) => (
-                        <li key={index}>{`${log.name} started at ${log.startTime.toLocaleTimeString()}`}</li>
-                    ))}
-                </ul>
-            </div>
-            <div className="mt-4">
-                <h2 className="mt-3 text-lg font-semibold">Leaderboard</h2>
-                <LeaderBoard speakers={speakers} />
-            </div>
+            <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
+            <LeaderBoard speakers={speakers} />
         </div>
     );
 }

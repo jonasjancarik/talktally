@@ -35,13 +35,13 @@ function RaisedHandList({ speakers, onToggleHand }) {
     }
 
     return (
-        <div>
-            <ul className="mt-4 space-y-2">
+        <div className="mt-4">
+            <ul className="list-group">
                 {sortedSpeakers.map(speaker => (
-                    <li key={speaker.id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
+                    <li key={speaker.id} className="list-group-item d-flex justify-content-between align-items-center">
                         {speaker.name}
-                        <span className="text-gray-500 ml-2">({getTimeSinceHandRaised(speaker.handRaisedTime)})</span>
-                        <button onClick={() => onToggleHand(speaker.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                        <span>({getTimeSinceHandRaised(speaker.handRaisedTime)})</span>
+                        <button onClick={() => onToggleHand(speaker.id)} className="btn btn-danger">
                             Lower Hand
                         </button>
                     </li>
