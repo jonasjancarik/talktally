@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import Speaker from '../components/Speaker';
-import RaisedHandList from '@/components/RaisedHandList';
-import LeaderBoard from '@/components/LeaderBoard';
+import SpeakerCard from '../components/SpeakerCard';
+import RaisedHandList from '../components/RaisedHandList';
+import LeaderBoard from '../components/LeaderBoard';
+
+import { Speaker } from '../types';
 
 export default function Home() {
-    const [speakers, setSpeakers] = useState([]);
+    const [speakers, setSpeakers] = useState<Speaker[]>([]);
 
     const addSpeaker = () => {
         const name = prompt("Enter the speaker's name:");
@@ -13,7 +15,7 @@ export default function Home() {
         }
     };
 
-    const handleSpeakerAction = useCallback((id, actionType, time = 0) => {
+    const handleSpeakerAction = useCallback((id: number, actionType: string, time = 0) => {
         setSpeakers(prevSpeakers => {
             // Map through the speakers to update their states based on the action
             return prevSpeakers.map(speaker => {
@@ -59,7 +61,7 @@ export default function Home() {
             <div className="row">
                 {speakers.sort((a, b) => a.id - b.id).map(speaker => (
                     <div key={speaker.id} className="col-md-4 mb-3">
-                        <Speaker
+                        <SpeakerCard
                             speaker={speaker}
                             handleSpeakerAction={handleSpeakerAction}
                         />

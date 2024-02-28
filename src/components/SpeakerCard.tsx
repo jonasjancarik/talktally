@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import FormatTime from './FormatTime';
 
-function Speaker({ speaker, handleSpeakerAction }) {
-    const [seconds, setSeconds] = useState(0);
-    const intervalSeconds = 0.01;
+interface SpeakerProps {
+    speaker: {
+        id: number;
+        name: string;
+        isActive: boolean;
+        totalTime: number;
+        floorCount: number;
+        handRaised: boolean;
+    };
+    handleSpeakerAction: (id: number, action: string) => void;
+}
+
+function SpeakerCard({ speaker, handleSpeakerAction }: SpeakerProps) {
+    const [seconds, setSeconds] = useState<number>(0);
+    const intervalSeconds: number = 0.01;
 
     useEffect(() => {
-        let interval = null;
+        let interval: NodeJS.Timeout | undefined = undefined;
         if (speaker.isActive) {
             setSeconds(0); // Reset seconds to 0 when speaker becomes active
             interval = setInterval(() => {
                 setSeconds(seconds => seconds + intervalSeconds);
-                handleSpeakerAction(speaker.id, 'updateTime', intervalSeconds);
+                handleSpeakerAction(speaker.id, 'updateTime');
             }, intervalSeconds * 1000);
         } else {
-            clearInterval(interval);
+            interval !== undefined && clearInterval(interval);
         }
         return () => clearInterval(interval);
     }, [speaker.isActive, speaker.id, handleSpeakerAction]);
@@ -35,4 +47,4 @@ function Speaker({ speaker, handleSpeakerAction }) {
     );
 }
 
-export default Speaker;
+export default SpeakerCard;

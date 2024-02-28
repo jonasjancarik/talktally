@@ -1,7 +1,16 @@
 import React from 'react';
 import FormatTime from './FormatTime';
 
-function LeaderBoard({ speakers }) {
+interface Speaker {
+    name: string;
+    totalTime: number;
+}
+
+interface LeaderBoardProps {
+    speakers: Speaker[];
+}
+
+function LeaderBoard({ speakers }: LeaderBoardProps) {
     return (
         <div className="mt-3">
             <ul className="list-group">
