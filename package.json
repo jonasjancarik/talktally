@@ -1,8 +1,11 @@
 {
   "name": "talktally",
   "version": "0.1.0",
+  "homepage": "https://jonasjancarik.github.io/talktally",
   "private": true,
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d .next",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "eslint": "^8",
-    "eslint-config-next": "14.1.0"
+    "eslint-config-next": "14.1.0",
+    "gh-pages": "^6.1.1"
   }
 }
