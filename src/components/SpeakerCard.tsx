@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FormatTime from './FormatTime';
 
-interface SpeakerProps {
+interface SpeakerCardProps {
     speaker: {
         id: number;
         name: string;
@@ -11,9 +11,10 @@ interface SpeakerProps {
         handRaised: boolean;
     };
     handleSpeakerAction: (id: number, action: string, timeIncrement?: number) => void;
+    color: string;
 }
 
-function SpeakerCard({ speaker, handleSpeakerAction }: SpeakerProps) {
+function SpeakerCard({ speaker, handleSpeakerAction, color: color }: SpeakerCardProps) {
     const [seconds, setSeconds] = useState<number>(0);
     const intervalSeconds: number = 0.01;
 
@@ -37,7 +38,7 @@ function SpeakerCard({ speaker, handleSpeakerAction }: SpeakerProps) {
     }, [speaker.isActive, speaker.id, handleSpeakerAction]);
 
     return (
-        <div className="card p-3">
+        <div className="card p-3" style={{ borderColor: color, borderWidth: '2px', borderStyle: 'solid' }}>
             <h5 className="card-title">{speaker.name}</h5>
             <p className="card-text">Time: <FormatTime seconds={seconds} /></p>
             <p className="card-text">Total Time: <FormatTime seconds={speaker.totalTime} /></p>

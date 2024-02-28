@@ -2,16 +2,34 @@ import React, { useState, useCallback } from 'react';
 import SpeakerCard from '../components/SpeakerCard';
 import RaisedHandList from '../components/RaisedHandList';
 import LeaderBoard from '../components/LeaderBoard';
+import distinctColors from 'distinct-colors';
 
 import { Speaker } from '../types';
 
 export default function Home() {
     const [speakers, setSpeakers] = useState<Speaker[]>([]);
 
+    // Generate a palette of distinct colors
+    const palette = distinctColors({ count: 10 }); // todo: Adjust 'count' based on the number of speakers    
+    const colorStyles = palette.map(color => color.hex());
+
     const addSpeaker = () => {
         const name = prompt("Enter the speaker's name:");
+        const colorIndex = speakers.length % colorStyles.length; // Recycling colors if necessary
+
         if (name) {
-            setSpeakers([...speakers, { id: Date.now(), name, isActive: false, totalTime: 0, floorCount: 0, handRaised: false, handRaisedTime: null }]);
+            const newSpeaker: Speaker = {
+                id: Date.now(), // Using timestamp for unique ID, consider a more robust method for production
+                name,
+                isActive: false,
+                totalTime: 0,
+                floorCount: 0,
+                handRaised: false,
+                handRaisedTime: null,
+                color: colorStyles[colorIndex],
+                displayOrder: speakers.length // Assign the next order value
+            };
+            setSpeakers([...speakers, newSpeaker]);
         }
     };
 
@@ -59,11 +77,12 @@ export default function Home() {
     return (
         <div className='container py-5'>
             <div className="row">
-                {speakers.sort((a, b) => a.id - b.id).map(speaker => (
+                {speakers.sort((a, b) => a.displayOrder - b.displayOrder).map((speaker, index) => (
                     <div key={speaker.id} className="col-md-4 mb-3">
                         <SpeakerCard
                             speaker={speaker}
                             handleSpeakerAction={handleSpeakerAction}
+                            color={colorStyles[index % colorStyles.length]} // Ensure colors are tied to speakers based on sorted order
                         />
                     </div>
                 ))}

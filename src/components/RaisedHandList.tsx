@@ -38,7 +38,11 @@ function RaisedHandList({ speakers, onHandleSpeakerAction }: RaisedHandListProps
         <div className="mt-4">
             <ul className="list-group">
                 {sortedSpeakers.map(speaker => (
-                    <li key={speaker.id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <li
+                        key={speaker.id}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                        style={{ borderColor: speaker.color, borderWidth: '2px', borderStyle: 'solid' }} // Apply the speaker's color as border color
+                    >
                         {speaker.name}
                         <span>({speaker.handRaisedTime && getTimeSinceHandRaised(speaker.handRaisedTime)})</span>
                         <button onClick={() => onHandleSpeakerAction(speaker.id, 'lowerHand')} className="btn btn-danger">
