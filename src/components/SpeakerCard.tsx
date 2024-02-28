@@ -10,7 +10,7 @@ interface SpeakerProps {
         floorCount: number;
         handRaised: boolean;
     };
-    handleSpeakerAction: (id: number, action: string) => void;
+    handleSpeakerAction: (id: number, action: string, timeIncrement?: number) => void;
 }
 
 function SpeakerCard({ speaker, handleSpeakerAction }: SpeakerProps) {
@@ -22,8 +22,13 @@ function SpeakerCard({ speaker, handleSpeakerAction }: SpeakerProps) {
         if (speaker.isActive) {
             setSeconds(0); // Reset seconds to 0 when speaker becomes active
             interval = setInterval(() => {
-                setSeconds(seconds => seconds + intervalSeconds);
-                handleSpeakerAction(speaker.id, 'updateTime');
+                setSeconds(seconds => {
+                    const newSeconds = seconds + intervalSeconds;
+                    if (speaker.isActive) {
+                        handleSpeakerAction(speaker.id, 'updateTime', intervalSeconds);
+                    }
+                    return newSeconds;
+                });
             }, intervalSeconds * 1000);
         } else {
             interval !== undefined && clearInterval(interval);

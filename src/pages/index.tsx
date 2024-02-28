@@ -15,7 +15,7 @@ export default function Home() {
         }
     };
 
-    const handleSpeakerAction = useCallback((id: number, actionType: string, time = 0) => {
+    const handleSpeakerAction = useCallback((id: number, actionType: string, timeIncrement = 0) => {
         setSpeakers(prevSpeakers => {
             // Map through the speakers to update their states based on the action
             return prevSpeakers.map(speaker => {
@@ -30,7 +30,7 @@ export default function Home() {
                         case 'pause':
                             return { ...speaker, isActive: false };
                         case 'updateTime':
-                            return { ...speaker, totalTime: speaker.totalTime + time };
+                            return { ...speaker, totalTime: speaker.totalTime + timeIncrement };
                         case 'raiseHand':
                             return { ...speaker, handRaised: true, handRaisedTime: new Date() };
                         case 'lowerHand':
