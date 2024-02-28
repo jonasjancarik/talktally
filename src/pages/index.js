@@ -15,20 +15,23 @@ export default function Home() {
 
     const handleSpeakerAction = (id, actionType, time = 0) => {
         setSpeakers(prevSpeakers => {
-            let updatedSpeakers = prevSpeakers.map(speaker => {
-                // Deactivate any active speaker when another speaker starts
-                if (actionType === 'start' && speaker.id !== id && speaker.isActive) {
-                    return { ...speaker, isActive: false };
-                }
-                return speaker;
-            });
+            // First, deactivate other speakers if the action is 'start' or 'giveFloor'
+            let updatedSpeakers = prevSpeakers;
+            if (actionType === 'start' || actionType === 'giveFloor') {
+                updatedSpeakers = speakers.map(speaker => {
+                    if (speaker.id !== id) {
+                        return { ...speaker, isActive: false };
+                    }
+                    return speaker;
+                });
+            }
 
+            // Then, apply specific action logic to the targeted speaker
             return updatedSpeakers.map(speaker => {
                 if (speaker.id === id) {
                     switch (actionType) {
                         case 'start':
-                            // No need to check for isActive here, since we already deactivated others
-                            return { ...speaker, isActive: true, floorCount: speaker.floorCount + 1 };
+                            return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1 };
                         case 'pause':
                             return { ...speaker, isActive: false };
                         case 'updateTime':
@@ -38,8 +41,6 @@ export default function Home() {
                         case 'lowerHand':
                             return { ...speaker, handRaised: false, handRaisedTime: null };
                         case 'giveFloor':
-                            // Explicitly deactivate all other speakers in case of 'giveFloor' as well
-                            updatedSpeakers.forEach(s => { if (s.id !== id) s.isActive = false; });
                             return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1, handRaisedTime: null };
                         default:
                             return speaker;
