@@ -43,13 +43,13 @@ function RaisedHandList({ speakers, onHandleSpeakerAction }: RaisedHandListProps
                         className="list-group-item d-flex justify-content-between align-items-center"
                         style={{ borderColor: speaker.color, borderWidth: '2px', borderStyle: 'solid' }} // Apply the speaker's color as border color
                     >
-                        {speaker.name}
+                        <span className='w-25'>{speaker.name}</span>
                         <span>({speaker.handRaisedTime && getTimeSinceHandRaised(speaker.handRaisedTime)})</span>
-                        <button onClick={() => onHandleSpeakerAction(speaker.id, 'lowerHand')} className="btn btn-danger">
-                            Lower Hand
+                        <button onClick={() => onHandleSpeakerAction(speaker.id, 'lowerHand')} className="btn btn-outline-danger">
+                            ✋⬇️
                         </button>
-                        <button onClick={() => onHandleSpeakerAction(speaker.id, 'giveFloor')} className="btn btn-success ml-2">
-                            Give Floor
+                        <button onClick={() => onHandleSpeakerAction(speaker.id, 'giveFloor')} className="btn btn-outline-success ml-2">
+                            ▶️
                         </button>
                     </li>
                 ))}

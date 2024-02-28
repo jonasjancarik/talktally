@@ -87,22 +87,22 @@ export default function Home() {
                     </div>
                 ))}
                 <div className='col-md-4 mb-3'>
-                    <button type='button' onClick={addSpeaker} className="btn btn-primary w-100 h-100">
-                        Add Speaker
+                    <button type='button' onClick={addSpeaker} className="btn btn-outline-primary w-100 h-100">
+                        ➕
                     </button>
                 </div>
             </div>
-            <div className="row">
+            <div className="row mt-5">
                 <div className="col-md-6">
-                    <h2>Raised Hands</h2>
+                    <h2><span className="flip-horizontal">🚶‍♂️🚶‍♀️🧍‍♂️🏃‍♀️🚶‍♂️🧍‍♀️🏃‍♂️🚶‍♀️</span></h2>
                     {speakers.filter(speaker => speaker.handRaised).length > 0 ? (
                         <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onHandleSpeakerAction={handleSpeakerAction} />
                     ) : (
-                        <em>Queue empty</em>
+                        <span>⚪</span>
                     )}
                 </div>
                 <div className="col-md-6">
-                    <h2>Leaderboard</h2>
+                    <h2>🥇🥈🥉</h2>
                     <LeaderBoard speakers={speakers} />
                 </div>
             </div>

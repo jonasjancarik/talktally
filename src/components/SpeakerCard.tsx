@@ -43,11 +43,11 @@ function SpeakerCard({ speaker, handleSpeakerAction, color: color }: SpeakerCard
             <p className="card-text">Time: <FormatTime seconds={seconds} /></p>
             <p className="card-text">Total Time: <FormatTime seconds={speaker.totalTime} /></p>
             <p className="card-text">Floor Count: {speaker.floorCount}</p>
-            <button onClick={() => handleSpeakerAction(speaker.id, speaker.isActive ? 'pause' : 'start')} className={`btn ${speaker.isActive ? 'btn-secondary' : 'btn-primary'}`}>
-                {speaker.isActive ? 'Pause' : 'Start'}
+            <button onClick={() => handleSpeakerAction(speaker.id, speaker.isActive ? 'pause' : 'start')} className={`btn ${speaker.isActive ? 'btn-outline-secondary' : 'btn-outline-primary'}`}>
+                {speaker.isActive ? '⏸️' : '▶️'}
             </button>
-            <button onClick={() => handleSpeakerAction(speaker.id, speaker.handRaised ? 'lowerHand' : 'raiseHand')} className={`btn ${speaker.handRaised ? 'btn-danger' : 'btn-success'} mt-2`}>
-                {speaker.handRaised ? 'Lower Hand' : 'Raise Hand'}
+            <button onClick={() => handleSpeakerAction(speaker.id, speaker.handRaised ? 'lowerHand' : 'raiseHand')} className={`btn ${speaker.handRaised ? 'btn-outline-danger' : 'btn-outline-success'} mt-2`}>
+                {speaker.handRaised ? '✋⬇️ ' : '🙋'}
             </button>
         </div>
     );

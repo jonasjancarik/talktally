@@ -71,3 +71,8 @@ button:hover {
 .p-2 { padding: 0.5rem; }
 .rounded { border-radius: 0.25rem; }
 .shadow { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  display: inline-block; /* Ensure the transform applies correctly */
+}
