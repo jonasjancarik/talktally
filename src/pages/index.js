@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Speaker from '../components/Speaker';
 import RaisedHandList from '@/components/RaisedHandList';
 import LeaderBoard from '@/components/LeaderBoard';
@@ -13,24 +13,17 @@ export default function Home() {
         }
     };
 
-    const handleSpeakerAction = (id, actionType, time = 0) => {
+    const handleSpeakerAction = useCallback((id, actionType, time = 0) => {
         setSpeakers(prevSpeakers => {
-            // First, deactivate other speakers if the action is 'start' or 'giveFloor'
-            let updatedSpeakers = prevSpeakers;
-            if (actionType === 'start' || actionType === 'giveFloor') {
-                updatedSpeakers = speakers.map(speaker => {
-                    if (speaker.id !== id) {
-                        return { ...speaker, isActive: false };
-                    }
-                    return speaker;
-                });
-            }
-
-            // Then, apply specific action logic to the targeted speaker
-            return updatedSpeakers.map(speaker => {
+            // Map through the speakers to update their states based on the action
+            return prevSpeakers.map(speaker => {
                 if (speaker.id === id) {
                     switch (actionType) {
                         case 'start':
+                            // Before activating the current speaker, deactivate all others
+                            prevSpeakers.forEach(s => {
+                                if (s.id !== id) s.isActive = false;
+                            });
                             return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1 };
                         case 'pause':
                             return { ...speaker, isActive: false };
@@ -41,15 +34,24 @@ export default function Home() {
                         case 'lowerHand':
                             return { ...speaker, handRaised: false, handRaisedTime: null };
                         case 'giveFloor':
+                            // Before giving the floor to the current speaker, deactivate all others
+                            prevSpeakers.forEach(s => {
+                                if (s.id !== id) s.isActive = false;
+                            });
                             return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1, handRaisedTime: null };
                         default:
                             return speaker;
                     }
+                } else {
+                    // For speakers other than the one being updated, deactivate if the action is 'start' or 'giveFloor'
+                    if (actionType === 'start' || actionType === 'giveFloor') {
+                        return { ...speaker, isActive: false };
+                    }
+                    return speaker;
                 }
-                return speaker;
             });
         });
-    };
+    }, []);
 
 
     return (

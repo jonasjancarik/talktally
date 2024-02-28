@@ -8,16 +8,16 @@ function Speaker({ speaker, handleSpeakerAction }) {
     useEffect(() => {
         let interval = null;
         if (speaker.isActive) {
+            setSeconds(0); // Reset seconds to 0 when speaker becomes active
             interval = setInterval(() => {
                 setSeconds(seconds => seconds + intervalSeconds);
-                // This will trigger the 'updateTime' action
                 handleSpeakerAction(speaker.id, 'updateTime', intervalSeconds);
             }, intervalSeconds * 1000);
         } else {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [speaker, handleSpeakerAction]);
+    }, [speaker.isActive, speaker.id, handleSpeakerAction]);
 
     return (
         <div className="card p-3">
