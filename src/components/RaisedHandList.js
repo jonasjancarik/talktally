@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function RaisedHandList({ speakers, onToggleHand }) {
+function RaisedHandList({ speakers, onToggleHand, onGiveFloor }) {
     // Sort speakers by the time their hand was raised
     const sortedSpeakers = speakers.sort((a, b) => a.handRaisedTime - b.handRaisedTime);
 
@@ -43,6 +43,9 @@ function RaisedHandList({ speakers, onToggleHand }) {
                         <span>({getTimeSinceHandRaised(speaker.handRaisedTime)})</span>
                         <button onClick={() => onToggleHand(speaker.id)} className="btn btn-danger">
                             Lower Hand
+                        </button>
+                        <button onClick={() => onGiveFloor(speaker.id)} className="btn btn-success ml-2">
+                            Give Floor
                         </button>
                     </li>
                 ))}

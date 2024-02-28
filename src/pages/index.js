@@ -68,6 +68,19 @@ export default function Home() {
         }));
     };
 
+    const handleGiveFloor = (id) => {
+        setSpeakers(prevSpeakers => {
+            return prevSpeakers.map(speaker => {
+                if (speaker.id === id) {
+                    // Make the speaker active, reset their hand raised state and increment floorCount
+                    return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1, handRaisedTime: null };
+                }
+                // Deactivate other speakers
+                return { ...speaker, isActive: false };
+            });
+        });
+    };    
+
     return (
         <div className='container py-5'>
             <div className="row">
@@ -92,7 +105,7 @@ export default function Home() {
                 <div className="col-md-6">
                     <h2>Raised Hands</h2>
                     {speakers.filter(speaker => speaker.handRaised).length > 0 ? (
-                        <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} />
+                        <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} onGiveFloor={handleGiveFloor} />
                     ) : (
                         <em>Queue empty</em>
                     )}
