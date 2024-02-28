@@ -5,81 +5,51 @@ import LeaderBoard from '@/components/LeaderBoard';
 
 export default function Home() {
     const [speakers, setSpeakers] = useState([]);
-    const [speakerLog, setSpeakerLog] = useState([]);
 
     const addSpeaker = () => {
         const name = prompt("Enter the speaker's name:");
         if (name) {
-            setSpeakers([...speakers, { id: Date.now(), name, isActive: false, totalTime: 0, floorCount: 0 }]);
+            setSpeakers([...speakers, { id: Date.now(), name, isActive: false, totalTime: 0, floorCount: 0, handRaised: false, handRaisedTime: null }]);
         }
     };
 
-    const handleToggleTimer = (id, isManualToggle) => {
+    const handleSpeakerAction = (id, actionType, time = 0) => {
         setSpeakers(prevSpeakers => {
-            console.log('running handleToggleTimer');
-            let isStartingNewTimer = false;
-
-            const updatedSpeakers = prevSpeakers.map(speaker => {
-                console.log(speaker);
-                if (speaker.id === id) {
-                    if (!speaker.isActive) {
-                        // Starting this speaker's timer
-                        isStartingNewTimer = true;
-                        return { ...speaker, isActive: true, floorCount: speaker.floorCount + 1 };
-                    } else {
-                        // Pausing this speaker's timer
-                        return { ...speaker, isActive: false };
-                    }
+            let updatedSpeakers = prevSpeakers.map(speaker => {
+                // Deactivate any active speaker when another speaker starts
+                if (actionType === 'start' && speaker.id !== id && speaker.isActive) {
+                    return { ...speaker, isActive: false };
                 }
                 return speaker;
             });
 
-            if (isStartingNewTimer && isManualToggle) {
-                // Deactivate all other speakers
-                return updatedSpeakers.map(speaker => {
-                    if (speaker.id !== id) {
-                        return { ...speaker, isActive: false };
-                    }
-                    return speaker;
-                });
-            }
-
-            return updatedSpeakers;
-        });
-    };
-
-    const handleToggleHand = (id) => {
-        setSpeakers(speakers.map(speaker => {
-            if (speaker.id === id) {
-                // Toggle the handRaised state
-                const isRaised = !speaker.handRaised;
-                return { ...speaker, handRaised: isRaised, handRaisedTime: isRaised ? new Date() : null };
-            }
-            return speaker;
-        }));
-    };
-
-    const handleUpdateTime = (id, time) => {
-        setSpeakers(prevSpeakers => prevSpeakers.map(speaker => {
-            if (speaker.id === id) {
-                return { ...speaker, totalTime: speaker.totalTime + time };
-            }
-            return speaker;
-        }));
-    };
-
-    const handleGiveFloor = (id) => {
-        setSpeakers(prevSpeakers => {
-            return prevSpeakers.map(speaker => {
+            return updatedSpeakers.map(speaker => {
                 if (speaker.id === id) {
-                    // Make the speaker active, reset their hand raised state and increment floorCount
-                    return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1, handRaisedTime: null };
+                    switch (actionType) {
+                        case 'start':
+                            // No need to check for isActive here, since we already deactivated others
+                            return { ...speaker, isActive: true, floorCount: speaker.floorCount + 1 };
+                        case 'pause':
+                            return { ...speaker, isActive: false };
+                        case 'updateTime':
+                            return { ...speaker, totalTime: speaker.totalTime + time };
+                        case 'raiseHand':
+                            return { ...speaker, handRaised: true, handRaisedTime: new Date() };
+                        case 'lowerHand':
+                            return { ...speaker, handRaised: false, handRaisedTime: null };
+                        case 'giveFloor':
+                            // Explicitly deactivate all other speakers in case of 'giveFloor' as well
+                            updatedSpeakers.forEach(s => { if (s.id !== id) s.isActive = false; });
+                            return { ...speaker, isActive: true, handRaised: false, floorCount: speaker.floorCount + 1, handRaisedTime: null };
+                        default:
+                            return speaker;
+                    }
                 }
-                // Deactivate other speakers
-                return { ...speaker, isActive: false };
+                return speaker;
             });
         });
-    };    
+    };
+
 
     return (
         <div className='container py-5'>
@@ -88,10 +58,7 @@ export default function Home() {
                     <div key={speaker.id} className="col-md-4 mb-3">
                         <Speaker
                             speaker={speaker}
-                            isActive={speaker.isActive}
-                            onToggleTimer={handleToggleTimer}
-                            onToggleHand={handleToggleHand}
-                            handleUpdateTime={handleUpdateTime}
+                            handleSpeakerAction={handleSpeakerAction}
                         />
                     </div>
                 ))}
@@ -105,7 +72,7 @@ export default function Home() {
                 <div className="col-md-6">
                     <h2>Raised Hands</h2>
                     {speakers.filter(speaker => speaker.handRaised).length > 0 ? (
-                        <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onToggleHand={handleToggleHand} onGiveFloor={handleGiveFloor} />
+                        <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onHandleSpeakerAction={handleSpeakerAction} />
                     ) : (
                         <em>Queue empty</em>
                     )}
