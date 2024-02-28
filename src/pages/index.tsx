@@ -94,7 +94,7 @@ export default function Home() {
             </div>
             <div className="row mt-5">
                 <div className="col-md-6">
-                    <h2><span className="flip-horizontal">🚶‍♂️🚶‍♀️🧍‍♂️🏃‍♀️🚶‍♂️🧍‍♀️🏃‍♂️🚶‍♀️</span></h2>
+                    <h2><span className="flip-horizontal">...🚶‍♂️🚶‍♀️🧍‍♂️🚶‍♂️🧍‍♀️🚶‍♀️</span></h2>
                     {speakers.filter(speaker => speaker.handRaised).length > 0 ? (
                         <RaisedHandList speakers={speakers.filter(speaker => speaker.handRaised)} onHandleSpeakerAction={handleSpeakerAction} />
                     ) : (

@@ -15,9 +15,20 @@ function RaisedHandList({ speakers, onHandleSpeakerAction }: RaisedHandListProps
         return 0;
     });
 
-    const getTimeSinceHandRaised = (time: Date): string => {
-        const currentTime = new Date().getTime();
+    const [currentTime, setCurrentTime] = useState<number>(Date.now());
 
+    useEffect(() => {
+        // Update the current time every second
+        const intervalId = setInterval(() => {
+            setCurrentTime(Date.now()); // This will trigger a re-render
+        }, 1000);
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []); // Empty dependency array means this effect runs only once on mount
+
+
+    const getTimeSinceHandRaised = (time: Date): string => {
         if (!time) return '';
 
         const seconds = Math.floor((currentTime - Number(time)) / 1000);
